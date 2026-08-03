@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# Install system dependencies including libxcb
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libxcb1 \
     libx11-6 \
@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y \
     libxrender1 \
     libgl1 \
     libglib2.0-0 \
+    libgles2 \
+    libegl1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
