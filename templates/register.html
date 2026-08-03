@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToneMatch — Create Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='10' fill='%23E91E8C'/><rect x='8' y='10' width='6' height='16' rx='3' fill='white' opacity='0.4'/><rect x='15' y='7' width='6' height='22' rx='3' fill='white' opacity='0.7'/><rect x='22' y='12' width='6' height='12' rx='3' fill='white'/></svg>">
+    <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+<body>
+<div class="auth-page">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+        <a href="/" class="auth-brand">
+            <svg width="32" height="32" viewBox="0 0 36 36" fill="none" style="border-radius:8px;flex-shrink:0">
+                <rect width="36" height="36" rx="10" fill="#E91E8C"/>
+                <rect x="8" y="10" width="6" height="16" rx="3" fill="white" opacity="0.4"/>
+                <rect x="15" y="7" width="6" height="22" rx="3" fill="white" opacity="0.7"/>
+                <rect x="22" y="12" width="6" height="12" rx="3" fill="white"/>
+            </svg>
+            <span class="brand-name">ToneMatch</span>
+        </a>
+
+        <div class="auth-left-hero">
+            <h1>Discover<br><em>your palette.</em></h1>
+            <p>Create a free account and get personalised colour recommendations based on your unique skin tone.</p>
+        </div>
+
+        <div class="auth-features">
+            <div class="auth-feature">
+                <div class="feature-dot"></div>
+                Upload any portrait photo
+            </div>
+            <div class="auth-feature">
+                <div class="feature-dot"></div>
+                Get makeup, clothing and hair colours
+            </div>
+            <div class="auth-feature">
+                <div class="feature-dot"></div>
+                Save unlimited analyses to your history
+            </div>
+        </div>
+
+        <!-- Decorative skin tone circles -->
+        <div class="deco-circles">
+            <div class="deco-circle dc1"></div>
+            <div class="deco-circle dc2"></div>
+            <div class="deco-circle dc3"></div>
+            <div class="deco-circle dc4"></div>
+            <div class="deco-circle dc5"></div>
+        </div>
+
+        <div class="auth-orb orb1"></div>
+        <div class="auth-orb orb2"></div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-right">
+        <div class="auth-card">
+            <h2>Create account</h2>
+            <p class="auth-sub">Already have an account? <a href="/login">Sign in</a></p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {% if category == 'success' %}
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                        {% else %}
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="POST" action="/register" class="auth-form">
+                <div class="form-group">
+                    <label>Full name</label>
+                    <div class="input-wrap">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input type="text" name="name" placeholder="Your full name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email address</label>
+                    <div class="input-wrap">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <input type="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrap">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <input type="password" name="password" placeholder="At least 6 characters" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Confirm password</label>
+                    <div class="input-wrap">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <input type="password" name="confirm_password" placeholder="Repeat your password" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-auth">
+                    Create account
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+                <p class="terms">By creating an account you agree to our terms of service</p>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

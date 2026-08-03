@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToneMatch — Analyse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='10' fill='%23E91E8C'/><rect x='8' y='10' width='6' height='16' rx='3' fill='white' opacity='0.4'/><rect x='15' y='7' width='6' height='22' rx='3' fill='white' opacity='0.7'/><rect x='22' y='12' width='6' height='12' rx='3' fill='white'/></svg>">
+    <link rel="stylesheet" href="/static/css/analyse.css">
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <svg width="32" height="32" viewBox="0 0 36 36" fill="none" style="border-radius:8px;flex-shrink:0">
+                <rect width="36" height="36" rx="10" fill="#E91E8C"/>
+                <rect x="8" y="10" width="6" height="16" rx="3" fill="white" opacity="0.4"/>
+                <rect x="15" y="7" width="6" height="22" rx="3" fill="white" opacity="0.7"/>
+                <rect x="22" y="12" width="6" height="12" rx="3" fill="white"/>
+            </svg>
+            <span class="nav-name">ToneMatch</span>
+        </a>
+        <div class="nav-links">
+            <a href="/analyse_page" class="active">Analyse</a>
+            <a href="/history">History</a>
+            <a href="/profile">Profile</a>
+        </div>
+        <div class="nav-right">
+            <div class="nav-user">
+                <div class="nav-avatar">{{ user.name[0].upper() }}</div>
+                <span class="nav-username">{{ user.name.split()[0] }}</span>
+            </div>
+            <a href="/logout" class="nav-logout" title="Sign out">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main>
+
+    <!-- UPLOAD SECTION -->
+    <section class="upload-section" id="uploadSection">
+        <div class="upload-header">
+            <p class="page-eyebrow">Computer Vision · Colour Analysis</p>
+            <h1 class="page-title">Analyse your<br><em>skin tone</em></h1>
+            <p class="page-sub">Upload a clear, front-facing portrait in natural lighting for the most accurate results.</p>
+        </div>
+
+        <div class="upload-card">
+            <div class="upload-area" id="uploadArea">
+                <input type="file" id="imageInput" accept=".jpg,.jpeg,.png" hidden>
+                <div class="upload-placeholder" id="uploadPlaceholder">
+                    <div class="upload-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <p class="upload-title">Drop your portrait here</p>
+                    <p class="upload-sub">or <span class="upload-link">browse files</span></p>
+                    <div class="upload-tips">
+                        <span class="tip"><span class="tip-dot"></span>Front facing</span>
+                        <span class="tip"><span class="tip-dot"></span>Natural light</span>
+                        <span class="tip"><span class="tip-dot"></span>No filters</span>
+                        <span class="tip"><span class="tip-dot"></span>JPG or PNG</span>
+                    </div>
+                </div>
+                <img id="previewImage" src="" alt="Your photo" style="display:none;">
+            </div>
+
+            <div class="upload-footer">
+                <div class="upload-footer-info" id="fileInfo" style="display:none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span id="fileName"></span>
+                </div>
+                <div class="upload-footer-info" id="noFileInfo">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    No photo selected
+                </div>
+                <button class="btn-analyse" id="analyseBtn" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    Analyse my skin tone
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOADING -->
+    <div class="loading-wrap" id="loading" style="display:none;">
+        <div class="loading-card">
+            <div class="loading-rings">
+                <div class="ring r1"></div>
+                <div class="ring r2"></div>
+                <div class="ring r3"></div>
+            </div>
+            <h3 class="loading-title">Analysing your skin tone</h3>
+            <p class="loading-sub">This takes just a moment</p>
+            <div class="loading-steps">
+                <div class="lstep active" id="lstep1">
+                    <div class="lstep-dot"></div>
+                    <span>Face detection</span>
+                </div>
+                <div class="lstep" id="lstep2">
+                    <div class="lstep-dot"></div>
+                    <span>Skin extraction</span>
+                </div>
+                <div class="lstep" id="lstep3">
+                    <div class="lstep-dot"></div>
+                    <span>Tone classification</span>
+                </div>
+                <div class="lstep" id="lstep4">
+                    <div class="lstep-dot"></div>
+                    <span>Generating palette</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="error-wrap" id="errorCard" style="display:none;">
+        <div class="error-inner">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p id="errorMessage"></p>
+            <button class="error-dismiss" id="errorDismiss">Try again</button>
+        </div>
+    </div>
+
+    <!-- RESULTS -->
+    <section class="results-section" id="resultsSection" style="display:none;">
+
+        <div class="results-hero">
+            <div class="results-hero-left">
+                <div class="tone-swatch-wrap">
+                    <div class="tone-swatch-lg" id="toneSwatch"></div>
+                    <div class="tone-swatch-ring"></div>
+                </div>
+                <div class="tone-hero-info">
+                    <p class="tone-hero-label">Your Skin Tone</p>
+                    <h2 class="tone-hero-name" id="skinToneName"></h2>
+                    <div class="undertone-badge" id="undertoneBadge"></div>
+                    <p class="undertone-desc" id="undertoneDesc"></p>
+                </div>
+            </div>
+            <div class="results-hero-right">
+                <div class="save-confirm">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    Saved to history
+                </div>
+                <button class="btn-new-analysis" id="tryAgainBtn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                    New analysis
+                </button>
+            </div>
+        </div>
+
+        <div class="results-divider"><span>Your Personalised Palette</span></div>
+
+        <!-- MAKEUP -->
+        <div class="rec-card">
+            <div class="rec-card-header">
+                <div class="rec-card-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                </div>
+                <div>
+                    <h3>Makeup</h3>
+                    <p>Shades matched to your tone and undertone</p>
+                </div>
+            </div>
+            <div class="makeup-grid" id="makeupGrid"></div>
+        </div>
+
+        <!-- CLOTHING -->
+        <div class="rec-card">
+            <div class="rec-card-header">
+                <div class="rec-card-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>
+                </div>
+                <div>
+                    <h3>Clothing Colours</h3>
+                    <p>Wardrobe colours that complement your complexion</p>
+                </div>
+            </div>
+            <div class="swatches-row" id="clothingSwatches"></div>
+        </div>
+
+        <!-- HAIR -->
+        <div class="rec-card">
+            <div class="rec-card-header">
+                <div class="rec-card-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/></svg>
+                </div>
+                <div>
+                    <h3>Hair Colours</h3>
+                    <p>Natural and dyed shades that enhance your look</p>
+                </div>
+            </div>
+            <div class="swatches-row" id="hairSwatches"></div>
+        </div>
+
+        <div class="results-footer">
+            <a href="/history" class="btn-view-history">
+                View all my analyses
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+    </section>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div style="display:flex;align-items:center;gap:8px">
+            <svg width="22" height="22" viewBox="0 0 36 36" fill="none" style="border-radius:6px">
+                <rect width="36" height="36" rx="10" fill="#E91E8C"/>
+                <rect x="8" y="10" width="6" height="16" rx="3" fill="white" opacity="0.4"/>
+                <rect x="15" y="7" width="6" height="22" rx="3" fill="white" opacity="0.7"/>
+                <rect x="22" y="12" width="6" height="12" rx="3" fill="white"/>
+            </svg>
+            <span style="font-size:14px;font-weight:500;color:#1A1A2E">ToneMatch</span>
+        </div>
+        <p>© 2026 ToneMatch — Personalised Colour Intelligence</p>
+    </div>
+</footer>
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>

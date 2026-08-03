@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToneMatch — Your Results</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><rect width='36' height='36' rx='10' fill='%23E91E8C'/><rect x='8' y='10' width='6' height='16' rx='3' fill='white' opacity='0.4'/><rect x='15' y='7' width='6' height='22' rx='3' fill='white' opacity='0.7'/><rect x='22' y='12' width='6' height='12' rx='3' fill='white'/></svg>">
+    <link rel="stylesheet" href="/static/css/results.css">
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <svg width="32" height="32" viewBox="0 0 36 36" fill="none" style="border-radius:8px;flex-shrink:0">
+                <rect width="36" height="36" rx="10" fill="#E91E8C"/>
+                <rect x="8" y="10" width="6" height="16" rx="3" fill="white" opacity="0.4"/>
+                <rect x="15" y="7" width="6" height="22" rx="3" fill="white" opacity="0.7"/>
+                <rect x="22" y="12" width="6" height="12" rx="3" fill="white"/>
+            </svg>
+            <span class="nav-name">ToneMatch</span>
+        </a>
+        <div class="nav-links">
+            <a href="/analyse_page">Analyse</a>
+            <a href="/history">History</a>
+            <a href="/profile">Profile</a>
+        </div>
+        <div class="nav-right">
+            <div class="nav-user">
+                <div class="nav-avatar">{{ user.name[0].upper() }}</div>
+                <span class="nav-username">{{ user.name.split()[0] }}</span>
+            </div>
+            <a href="/logout" class="nav-logout" title="Sign out">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main>
+
+    <!-- HERO BANNER -->
+    <div class="results-banner" style="background: linear-gradient(135deg, {{ result.hex_colour }}22, {{ result.hex_colour }}08)">
+        <div class="results-banner-inner">
+            <div class="banner-left">
+                <p class="banner-eyebrow">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    Analysis complete · {{ result.created_at }}
+                </p>
+                <h1 class="banner-title">Your colour<br><em>palette is ready</em></h1>
+                <p class="banner-sub">Based on your skin tone analysis, here are the colours that will complement you best across makeup, clothing and hair.</p>
+                <div class="banner-actions">
+                    <a href="/analyse_page" class="btn-new">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                        New analysis
+                    </a>
+                    <a href="/history" class="btn-history">
+                        View all results
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="banner-right">
+                <div class="tone-display">
+                    <div class="tone-circle-xl" style="background:{{ result.hex_colour }}">
+                        <div class="tone-circle-inner"></div>
+                    </div>
+                    <div class="tone-display-info">
+                        <p class="tone-display-label">Skin Tone</p>
+                        <h2 class="tone-display-name">{{ result.skin_tone }}</h2>
+                        <div class="undertone-pill">{{ result.undertone }} Undertone</div>
+                        <p class="undertone-description">{{ result.undertone_description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-content">
+
+        <!-- MAKEUP -->
+        <div class="rec-section">
+            <div class="rec-section-header">
+                <div class="rec-section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                </div>
+                <div>
+                    <h2>Makeup</h2>
+                    <p>Shades matched to your skin tone and undertone</p>
+                </div>
+            </div>
+            <div class="makeup-cards">
+                {% for category, colours in result.makeup.items() %}
+                <div class="makeup-card">
+                    <div class="makeup-card-label">{{ category }}</div>
+                    <ul class="makeup-card-list">
+                        {% for colour in colours %}
+                        <li>
+                            <span class="makeup-dot" style="background:{{ colour | lower | replace(' ', '') }}"></span>
+                            {{ colour }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- CLOTHING -->
+        <div class="rec-section">
+            <div class="rec-section-header">
+                <div class="rec-section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>
+                </div>
+                <div>
+                    <h2>Clothing Colours</h2>
+                    <p>Wardrobe shades that complement your complexion</p>
+                </div>
+            </div>
+            <div class="swatches-grid" id="clothingGrid">
+                {% for colour in result.clothing %}
+                <div class="swatch-card" data-colour="{{ colour }}">
+                    <div class="swatch-card-circle"></div>
+                    <span>{{ colour }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- HAIR -->
+        <div class="rec-section">
+            <div class="rec-section-header">
+                <div class="rec-section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/></svg>
+                </div>
+                <div>
+                    <h2>Hair Colours</h2>
+                    <p>Natural and dyed shades that enhance your look</p>
+                </div>
+            </div>
+            <div class="swatches-grid" id="hairGrid">
+                {% for colour in result.hair %}
+                <div class="swatch-card" data-colour="{{ colour }}">
+                    <div class="swatch-card-circle"></div>
+                    <span>{{ colour }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- BOTTOM ACTIONS -->
+        <div class="bottom-actions">
+            <a href="/analyse_page" class="btn-primary-lg">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                Analyse another photo
+            </a>
+            <a href="/history" class="btn-ghost-lg">
+                View my history
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <div style="display:flex;align-items:center;gap:8px">
+            <svg width="22" height="22" viewBox="0 0 36 36" fill="none" style="border-radius:6px">
+                <rect width="36" height="36" rx="10" fill="#E91E8C"/>
+                <rect x="8" y="10" width="6" height="16" rx="3" fill="white" opacity="0.4"/>
+                <rect x="15" y="7" width="6" height="22" rx="3" fill="white" opacity="0.7"/>
+                <rect x="22" y="12" width="6" height="12" rx="3" fill="white"/>
+            </svg>
+            <span style="font-size:14px;font-weight:500;color:#1A1A2E">ToneMatch</span>
+        </div>
+        <p>© 2026 ToneMatch — Personalised Colour Intelligence</p>
+    </div>
+</footer>
+
+<script>
+const colourMap = {
+    'camel':'#C19A6B','terracotta':'#E2725B','warm orange':'#FF8C42',
+    'olive':'#808000','mustard yellow':'#FFDB58','rust':'#B7410E',
+    'warm brown':'#7B4F2E','navy blue':'#001F5B','royal blue':'#4169E1',
+    'emerald':'#50C878','burgundy':'#800020','cool grey':'#9EA3A8',
+    'lavender':'#E6E6FA','soft teal':'#7BB8B0','blush pink':'#FFB6C1',
+    'sage green':'#B2AC88','dusty blue':'#8FAFC0','warm taupe':'#A08060',
+    'soft coral':'#F08070','cream':'#FFFDD0','gold':'#FFD700',
+    'bronze':'#CD7F32','copper':'#B87333','cobalt blue':'#0047AB',
+    'purple':'#800080','deep teal':'#008080','fuchsia':'#FF00FF',
+    'teal':'#008080','forest green':'#228B22','warm white':'#FAF0E6',
+    'burnt sienna':'#E97451','dusty rose':'#DCB4B4','orange':'#FFA500',
+    'warm red':'#C0392B','yellow':'#FFD700','deep coral':'#FF6B6B',
+    'brown':'#A0522D','bright orange':'#FF6600','olive green':'#6B8E23',
+    'royal purple':'#7851A9','bright white':'#FFFFFF','hot pink':'#FF69B4',
+    'bright green':'#00CC44','navy':'#001F5B','mauve':'#E0B0C8',
+    'silver':'#C0C0C0','champagne':'#F7E7CE','soft pink':'#FFD1DC',
+    'wine':'#722F37','plum':'#8E4585','berry':'#8B1A4A',
+    'honey blonde':'#F5A623','golden brown':'#996633','caramel brown':'#A0522D',
+    'auburn':'#922724','espresso':'#3C1A0E','jet black':'#0A0A0A',
+    'natural black':'#1A1A1A','peach':'#FFCBA4','coral':'#FF7F50',
+    'warm beige':'#D4B896','natural beige':'#C9A882','sand':'#C2B280',
+    'caramel':'#C47A3A','tan':'#D2B48C','ebony':'#3D2314',
+    'warm ivory':'#FFF8EE','nude pink':'#D4A5A5','warm rose':'#C96A7A',
+    'ash brown':'#987654','warm chestnut':'#954535','dark honey':'#B8860B',
+    'light brown':'#A07850','medium brown':'#784030','dark brown':'#5C2E18',
+    'blue black':'#0A0818','deep burgundy':'#4A0010','warm auburn':'#A52A2A',
+    'cool auburn':'#8B3A3A','deep rose':'#C06080','cool chestnut':'#8B5E3C',
+    'neutral auburn':'#8B4040','warm copper':'#A05030','rich purple':'#6A0DAD',
+    'deep gold':'#B8860B','warm navy':'#1A2A5E','soft black':'#1A1010'
+};
+
+function getColour(name) {
+    const key = name.toLowerCase();
+    if (colourMap[key]) return colourMap[key];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return `hsl(${Math.abs(hash) % 60 + 15}, 45%, 55%)`;
+}
+
+// Apply colours to swatch cards
+document.querySelectorAll('.swatch-card').forEach(card => {
+    const colour = card.getAttribute('data-colour');
+    const circle = card.querySelector('.swatch-card-circle');
+    if (circle) circle.style.background = getColour(colour);
+});
+</script>
+
+</body>
+</html>

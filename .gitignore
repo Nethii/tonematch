@@ -1,0 +1,11 @@
+.env
+venv/
+__pycache__/
+*.pyc
+static/uploads/*
+face_landmarker.task
+*.db
+test_phase2.py
+test_phase3.py
+test_phase4.py
+test_phase5.py
