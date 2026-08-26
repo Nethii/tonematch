@@ -3,9 +3,16 @@ venv/
 __pycache__/
 *.pyc
 static/uploads/*
+!static/uploads/.gitkeep
 face_landmarker.task
 *.db
 test_phase2.py
 test_phase3.py
 test_phase4.py
 test_phase5.py
+Dockerfile
+Procfile
+railway.json
+render.yaml
+vercel.json
+wsgi.py

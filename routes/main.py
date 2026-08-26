@@ -12,6 +12,7 @@ from modules.skin_extractor import SkinExtractor
 from modules.skin_classifier import SkinClassifier
 from modules.recommender import Recommender
 
+
 main = Blueprint('main', __name__)
 
 UPLOAD_FOLDER = 'static/uploads'

@@ -19,7 +19,7 @@ def create_app():
     # Build database connection from individual variables
     password = quote_plus(os.getenv('MYSQL_PASSWORD', ''))
     host = os.getenv('MYSQL_HOST', 'localhost')
-    port = os.getenv('MYSQL_PORT', '3306')
+    port = os.getenv('MYSQL_PORT') or os.getenv('MYSQLPORT') or '3306'
     user = os.getenv('MYSQL_USER', 'root')
     database = os.getenv('MYSQL_DB', 'tonematch')
 
